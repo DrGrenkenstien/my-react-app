@@ -3,6 +3,9 @@ import { loginFields } from "../constants/formFields";
 import FormAction from "./FormAction";
 import FormExtra from "./FormExtra";
 import Input from "./Input";
+import auth from "../constants/firebase"
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 
 const fields=loginFields;
 let fieldsState = {};
@@ -22,7 +25,18 @@ export default function Login(){
 
     //Handle Login API Integration here
     const authenticateUser = () =>{
-
+        const email = loginState["email-address"]
+        const password = loginState["password"]
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
     }
 
     return(

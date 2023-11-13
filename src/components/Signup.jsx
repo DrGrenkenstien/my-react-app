@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { signupFields } from "../constants/formFields"
 import FormAction from "./FormAction";
 import Input from "./Input";
+import auth from "../constants/firebase"
+import {createUserWithEmailAndPassword} from 'firebase/auth'
 
 const fields=signupFields;
 let fieldsState={};
@@ -21,7 +23,26 @@ export default function Signup(){
 
   //handle Signup API Integration here
   const createAccount=()=>{
-
+    // const auth = getAuth();
+    const email = signupState["email-address"]
+    const password = signupState["password"]
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed up 
+      const user = userCredential.user;
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      switch(errorCode){
+        case 'auth/email-already-in-use':
+          alert("Email already in use")
+      }
+      console.log(errorCode)
+      console.log(errorMessage)
+      // ..
+    });
   }
 
     return(
