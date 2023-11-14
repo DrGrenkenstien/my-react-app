@@ -4,6 +4,7 @@ import FormAction from "./FormAction";
 import Input from "./Input";
 import auth from "../constants/firebase"
 import {createUserWithEmailAndPassword} from 'firebase/auth'
+import { Navigate } from "react-router-dom";
 
 const fields=signupFields;
 let fieldsState={};
@@ -12,8 +13,13 @@ fields.forEach(field => fieldsState[field.id]='');
 
 export default function Signup(){
   const [signupState,setSignupState]=useState(fieldsState);
+  const [isLoggedIn, setisLoggedIn] = useState(false)
 
   const handleChange=(e)=>setSignupState({...signupState,[e.target.id]:e.target.value});
+
+  if(isLoggedIn){
+    return <Navigate to = '/'/>
+  }
 
   const handleSubmit=(e)=>{
     e.preventDefault();
@@ -37,7 +43,7 @@ export default function Signup(){
       const errorMessage = error.message;
       switch(errorCode){
         case 'auth/email-already-in-use':
-          alert("Email already in use")
+          setisLoggedIn(true)
       }
       console.log(errorCode)
       console.log(errorMessage)
